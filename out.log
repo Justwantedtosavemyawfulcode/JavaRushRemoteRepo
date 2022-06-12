@@ -28851,3 +28851,23 @@ com.homework.plugin.analytics.PluginWarningException: warning
 2022-06-12 19:43:45 INFO  ApacheHttpClient.refreshUserInfo(311) - User information received.
 2022-06-12 19:43:45 INFO  ApacheHttpClient.startGA(36) - GAService started.
 2022-06-12 19:43:45 INFO  ApacheHttpClient.startGA(36) - GAService started.
+2022-06-12 19:55:43 INFO  PluginProjectService.dispose(41) - PluginProjectService for disposed.
+2022-06-12 19:55:43 INFO  PluginProjectService.dispose(41) - PluginProjectService for disposed.
+2022-06-12 19:56:46 INFO  PluginProjectService.<init>(33) - PluginProjectService for JavaRushTasks initiated.
+2022-06-12 19:56:46 INFO  PluginProjectService.<init>(33) - PluginProjectService for JavaRushTasks initiated.
+2022-06-12 19:56:46 INFO  ApacheHttpClient.getWebResourceAsStream(502) - responseCode = 200
+2022-06-12 19:56:46 INFO  ApacheHttpClient.getWebResourceAsStream(502) - responseCode = 200
+2022-06-12 19:56:46 INFO  ProjectStartupHandler.runActivity(74) - ---------- Project opened ----------
+2022-06-12 19:56:46 INFO  ProjectStartupHandler.runActivity(74) - ---------- Project opened ----------
+2022-06-12 19:56:46 INFO  ProjectStartupHandler.runActivity(75) - ---------- Version 3.57 ----------
+
+2022-06-12 19:56:46 INFO  ProjectStartupHandler.runActivity(75) - ---------- Version 3.57 ----------
+
+2022-06-12 19:56:46 INFO  ApacheHttpClient.isSessionAppropriateWithSecretKey(602) - Waiting for server response.
+2022-06-12 19:56:46 INFO  ApacheHttpClient.isSessionAppropriateWithSecretKey(602) - Waiting for server response.
+2022-06-12 19:56:47 INFO  ApacheHttpClient.refreshUserInfo(305) - responseCode = 200
+2022-06-12 19:56:47 INFO  ApacheHttpClient.refreshUserInfo(305) - responseCode = 200
+2022-06-12 19:56:47 INFO  ApacheHttpClient.refreshUserInfo(311) - User information received.
+2022-06-12 19:56:47 INFO  ApacheHttpClient.refreshUserInfo(311) - User information received.
+2022-06-12 19:56:47 INFO  ApacheHttpClient.startGA(36) - GAService started.
+2022-06-12 19:56:47 INFO  ApacheHttpClient.startGA(36) - GAService started.
