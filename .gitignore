@@ -1,4 +1,5 @@
-out.log
 
 # Project exclude paths
 /out/
+/out.log
+/out.log.*
