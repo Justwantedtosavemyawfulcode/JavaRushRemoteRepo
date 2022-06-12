@@ -3,5 +3,6 @@ package com.javarush.task.task30.task3008.client;
 public class TestClass {
     public static void main(String[] args) {
         System.out.println("fuck out.log");
+        System.out.println("yeah");
     }
 }
