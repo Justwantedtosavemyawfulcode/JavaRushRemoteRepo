@@ -16,11 +16,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-public class ZipFileManager {
+public class OriginalZipFileManager {
     // Полный путь zip файла
     private final Path zipFile;
 
-    public ZipFileManager(Path zipFile) {
+    public OriginalZipFileManager(Path zipFile) {
         this.zipFile = zipFile;
     }
 
@@ -39,9 +39,9 @@ public class ZipFileManager {
                     ConsoleHelper.writeMessage("Файл " + zipEntry.getName() + " удален.");
                 }
                 else {
-                        zipOutputStream.putNextEntry(zipEntry);
-                        copyData(zipInputStream, zipOutputStream);
-                    }
+                    zipOutputStream.putNextEntry(zipEntry);
+                    copyData(zipInputStream, zipOutputStream);
+                }
 
             }
         }
@@ -54,6 +54,42 @@ public class ZipFileManager {
         List<Path> file = Collections.singletonList(path);
         removeFiles(file);
     }
+
+    public void extractAll(Path outputFolder) throws Exception {
+        if (!Files.exists(zipFile)) {
+            throw new WrongZipFileException();
+        }
+        if (!Files.exists(outputFolder)) {
+            Files.createDirectories(outputFolder);
+        }
+
+        try (ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(zipFile))) {
+            ZipEntry zipEntry;
+
+            while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+                Path fullFilePath = outputFolder.resolve(zipEntry.getName());
+                if (zipEntry.getName().contains("\\") || zipEntry.getName().contains("/")) {
+                    String[] directories = zipEntry.getName().split("\\\\|\\/");
+                    StringBuilder directoriesWithoutAFile = new StringBuilder();
+                    for (int i = 0; i < directories.length - 1; i++) {
+                        directoriesWithoutAFile.append(directories[i] + "/");
+                    }
+                    Files.createDirectories(outputFolder.resolve(directoriesWithoutAFile.toString()));
+
+                }
+                copyData(zipInputStream, Files.newOutputStream(fullFilePath));
+            }
+        }
+    }
+
+//    private void extractFileToPath(ZipInputStream zipInputStream, Path path) throws IOException { // Это было лишнее, можно было через copyData
+//        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(Files.newOutputStream(path));
+//        byte[] bytes = new byte[1024];
+//        int count;
+//        while ((count = zipInputStream.read(bytes)) != -1) {
+//            bufferedOutputStream.write(bytes, 0 , count);
+//        }
+//    }
 
     public void createZip(Path source) throws Exception {
         // Проверяем, существует ли директория, где будет создаваться архив
@@ -82,37 +118,6 @@ public class ZipFileManager {
 
                 // Если переданный source не директория и не файл, бросаем исключение
                 throw new PathIsNotFoundException();
-            }
-        }
-    }
-
-    public void extractAll(Path outputFolder) throws Exception {
-        // Проверяем существует ли zip файл
-        if (!Files.isRegularFile(zipFile)) {
-            throw new WrongZipFileException();
-        }
-
-        try (ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(zipFile))) {
-            // Создаем директорию вывода, если она не существует
-            if (Files.notExists(outputFolder))
-                Files.createDirectories(outputFolder);
-
-            // Проходимся по содержимому zip потока (файла)
-            ZipEntry zipEntry = zipInputStream.getNextEntry();
-
-            while (zipEntry != null) {
-                String fileName = zipEntry.getName();
-                Path fileFullName = outputFolder.resolve(fileName);
-
-                // Создаем необходимые директории
-                Path parent = fileFullName.getParent();
-                if (Files.notExists(parent))
-                    Files.createDirectories(parent);
-
-                try (OutputStream outputStream = Files.newOutputStream(fileFullName)) {
-                    copyData(zipInputStream, outputStream);
-                }
-                zipEntry = zipInputStream.getNextEntry();
             }
         }
     }
