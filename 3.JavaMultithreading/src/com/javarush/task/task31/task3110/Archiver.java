@@ -8,6 +8,7 @@ public class Archiver {
     public static void main(String[] args) throws Exception {
 //        ZipFileManager zipFileManager = new ZipFileManager(Paths.get("C:\\Users\\leonid\\Desktop\\1.zip"));
 //        zipFileManager.createZip(Paths.get("C:\\Users\\leonid\\Desktop\\tst"));
+//        zipFileManager.extractAll(Paths.get("C:\\Test Java Project"));
 
         Operation operation = null;
         do {
