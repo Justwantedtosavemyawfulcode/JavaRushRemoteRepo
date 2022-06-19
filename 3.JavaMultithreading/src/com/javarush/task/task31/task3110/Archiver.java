@@ -7,6 +7,7 @@ import java.io.IOException;
 public class Archiver {
     public static void main(String[] args) throws Exception {
 //        ZipFileManager zipFileManager = new ZipFileManager(Paths.get("C:\\Users\\leonid\\Desktop\\1.zip"));
+//        zipFileManager.addFile(Paths.get("C:\\\\Users\\\\leonid\\\\Desktop\\\\first.txt"));
 //        List<Path> list = new ArrayList<>();
 //        list.add(Paths.get("df\\weg.txt"));
 //        zipFileManager.removeFiles(list);

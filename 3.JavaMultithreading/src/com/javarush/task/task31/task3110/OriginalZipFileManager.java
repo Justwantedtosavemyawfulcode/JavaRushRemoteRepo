@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +23,47 @@ public class OriginalZipFileManager {
 
     public OriginalZipFileManager(Path zipFile) {
         this.zipFile = zipFile;
+    }
+
+    public void addFiles(List<Path> absolutePathList) throws Exception {
+        if (!Files.isRegularFile(zipFile)) {
+            throw new WrongZipFileException();
+        }
+
+        Path tempZipFile = Files.createTempFile(null, null);
+        List<Path> originalFilesHistoryList = new ArrayList<>();
+
+        try (ZipInputStream zipInputStream = new ZipInputStream(Files.newInputStream(zipFile));
+             ZipOutputStream zipOutputStream = new ZipOutputStream(Files.newOutputStream(tempZipFile))) {
+
+            ZipEntry zipEntry;
+            while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+                zipOutputStream.putNextEntry(zipEntry);
+                copyData(zipInputStream, zipOutputStream);
+                originalFilesHistoryList.add(Paths.get(zipEntry.getName()));
+            }
+
+            for (Path path : absolutePathList) {
+                if (!Files.isRegularFile(path)) {
+                    throw new PathIsNotFoundException();
+                }
+                if (!originalFilesHistoryList.contains(path.getFileName())) {
+                    zipOutputStream.putNextEntry(new ZipEntry(path.getFileName().toString()));
+                    try (InputStream inputStream = Files.newInputStream(path)) {
+                        copyData(inputStream, zipOutputStream);
+                    }
+                    ConsoleHelper.writeMessage("Файл добавлен в архив.");
+                }
+                if (originalFilesHistoryList.contains(path.getFileName())) {
+                    ConsoleHelper.writeMessage("Файл уже есть в архиве.");
+                }
+            }
+        }
+        Files.move(tempZipFile, zipFile, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    public void addFile(Path absolutePath) throws Exception {
+        addFiles(Collections.singletonList(absolutePath));
     }
 
     public void removeFiles(List<Path> pathList) throws Exception {
