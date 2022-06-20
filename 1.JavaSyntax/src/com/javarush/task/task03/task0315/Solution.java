@@ -4,8 +4,6 @@ package com.javarush.task.task03.task0315;
 Каждый охотник желает знать…
 */
 
-import com.sun.org.apache.xpath.internal.operations.Or;
-
 public class Solution {
     public static void main(String[] args) {
         Red red = new Red();
