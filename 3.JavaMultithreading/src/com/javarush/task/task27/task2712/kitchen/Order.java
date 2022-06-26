@@ -16,6 +16,18 @@ public class Order {
         dishes = ConsoleHelper.getAllDishesForOrder();
     }
 
+    public int getTotalCookingTime() {
+        int returningTotalTime = 0;
+        for (Dish dish : dishes) {
+            returningTotalTime += dish.getDuration();
+        }
+        return returningTotalTime;
+    }
+
+    public boolean isEmpty() {
+        return dishes.isEmpty();
+    }
+
     @Override
     public String toString() {
         if (dishes == null || dishes.size() == 0) {
@@ -27,7 +39,10 @@ public class Order {
             for (Dish dish : dishes) {
                 stringJoiner.add(dish.toString());
             }
-            return stringBuilder.append(stringJoiner.toString()).append("] of ").append(tablet.toString()).toString();
+            return stringBuilder.append(stringJoiner.toString())
+                    .append("] of ")
+                    .append(tablet.toString())
+                    .append(", cooking time " + getTotalCookingTime() + "min").toString();
         }
     }
 }
