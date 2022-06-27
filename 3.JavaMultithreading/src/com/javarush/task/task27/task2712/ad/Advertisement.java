@@ -7,6 +7,7 @@ public class Advertisement {
     private int hits; // Quantity of how many times ad was played.
     private int duration; // In seconds.
     private long amountPerOneDisplaying; // Initial Amount / hits.
+    private long amountPerSecondOfShowing; // Initial amount / duration.
 
     public Advertisement(Object content, String name, long initialAmount, int hits, int duration) {
         this.content = content;
@@ -32,5 +33,12 @@ public class Advertisement {
 
     public long getAmountPerOneDisplaying() {
         return amountPerOneDisplaying;
+    }
+
+    public void revalidate() {
+        if (hits <= 0) {
+            throw new UnsupportedOperationException();
+        }
+        --hits;
     }
 }
