@@ -15,7 +15,7 @@ public class Advertisement {
         this.initialAmount = initialAmount;
         this.hits = hits;
         this.duration = duration;
-        if (hits != 0) {
+        if (hits > 0) {
             this.amountPerOneDisplaying = initialAmount / hits;
         }
         else {
@@ -29,6 +29,14 @@ public class Advertisement {
 
     public int getDuration() {
         return duration;
+    }
+
+    public int getHits() {
+        return hits;
+    }
+
+    public void setHits(int hits) {
+        this.hits = hits;
     }
 
     public long getAmountPerOneDisplaying() {

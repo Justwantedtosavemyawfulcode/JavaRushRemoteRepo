@@ -1,5 +1,8 @@
 package com.javarush.task.task27.task2712.ad;
 
+import com.javarush.task.task27.task2712.ConsoleHelper;
+
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,10 +15,29 @@ public class AdvertisementManager {
     }
 
     public void processVideos() {
-        List<Advertisement> storageList = storage.list();
-        if (storageList.isEmpty()) {
+        List<Advertisement> videosForShowing = storage.list();
+        if (videosForShowing.isEmpty()) {
             throw new NoVideoAvailableException();
         }
-        Collections.sort(storageList, new CustomizedComparator(new ComparatorByAmountPerOneDisplaying(), new ComparatorByAmountPerOneSecondOfShowing()));
+        sortVideosByRevenue(videosForShowing);
+        Collections.sort(videosForShowing, new CustomizedComparator(new ComparatorByAmountPerOneDisplaying(), new ComparatorByAmountPerOneSecondOfShowing()));
+        for (Advertisement advertisement : videosForShowing) {
+            advertisement.revalidate();
+            ConsoleHelper.writeMessage(String.format("%s is displaying... %d, %d", advertisement.getName(), advertisement.getAmountPerOneDisplaying(), advertisement.getAmountPerOneDisplaying() * 1000 / advertisement.getDuration()));
+        }
+    }
+
+    private List<Advertisement> sortVideosByRevenue(List<Advertisement> listOfVideos) {
+        int timeOfCookingLeft = timeSeconds;
+        List<Advertisement> sortedVideosList = new ArrayList<>(listOfVideos);
+        List<Advertisement> resultList = new ArrayList<>();
+        Collections.sort(sortedVideosList, new ComparatorByAmountPerOneSecondOfShowingByIncrease());
+        for (Advertisement advertisement : sortedVideosList) {
+            if (advertisement.getDuration() <= timeOfCookingLeft) {
+                resultList.add(advertisement);
+                timeOfCookingLeft -= advertisement.getDuration();
+            }
+        }
+        return resultList;
     }
 }
