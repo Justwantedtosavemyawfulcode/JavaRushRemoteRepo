@@ -17,7 +17,7 @@ public class AdvertisementManager {
     public void processVideos() {
         List<Advertisement> videosForShowing = storage.list();
         OptimalVideoListCreator optimalVideoListCreator = new OptimalVideoListCreator();
-        optimalVideoListCreator.sortVideosForMaxRevenue(videosForShowing);
+        optimalVideoListCreator.removeAllVideosWithoutHitsAndSortForMaxRevenue(videosForShowing);
         videosForShowing = optimalVideoListCreator.getVideosForShowing();
         if (videosForShowing.isEmpty()) {
             throw new NoVideoAvailableException();
@@ -31,8 +31,10 @@ public class AdvertisementManager {
 
 
     private class OptimalVideoListCreator {
-        private List<Advertisement> videosForShowing;
-        private long bestTotalPrice;
+        private List<Advertisement> videosForShowing = new ArrayList<>();
+        private long bestTotalPrice = 0;
+        private long maxSumTime = 0;
+        private int minSizeOfList = 0;
 
         private long calculateTotalPrice(List<Advertisement> videos) {
             int returnedResult = 0;
@@ -51,17 +53,43 @@ public class AdvertisementManager {
         }
 
         private void checkVideoList(List<Advertisement> videos) {
-            if (videosForShowing == null) {
-                if (calculateLength(videos) <= timeSeconds) {
+            int timeOfCurrentList = calculateLength(videos);
+            long priceOfCurrentList = calculateTotalPrice(videos);
+            if (videosForShowing.isEmpty()) {
+                if (timeOfCurrentList <= timeSeconds) {
+                    bestTotalPrice = priceOfCurrentList;
+                    maxSumTime = timeOfCurrentList;
+                    minSizeOfList = videos.size();
                     videosForShowing = videos;
                 }
             }
             else {
-                if ((calculateLength(videos) <= timeSeconds) && (calculateTotalPrice(videos) >= bestTotalPrice)) {
-                    bestTotalPrice = calculateTotalPrice(videos);
-                    videosForShowing = videos;
+                if (timeOfCurrentList <= timeSeconds && priceOfCurrentList >= bestTotalPrice) {
+                    if (timeOfCurrentList > maxSumTime) {
+                        bestTotalPrice = priceOfCurrentList;
+                        maxSumTime = timeOfCurrentList;
+                        minSizeOfList = videos.size();
+                        videosForShowing = videos;
+                    }
+                    if (priceOfCurrentList == bestTotalPrice && timeOfCurrentList == maxSumTime && videos.size() < minSizeOfList) {
+                        bestTotalPrice = priceOfCurrentList;
+                        maxSumTime = timeOfCurrentList;
+                        minSizeOfList = videos.size();
+                        videosForShowing = videos;
+                    }
                 }
             }
+        }
+
+        public void removeAllVideosWithoutHitsAndSortForMaxRevenue(List<Advertisement> videos) {
+            List<Advertisement> videosToDeletion = new ArrayList<>();
+            for (Advertisement advertisement : videos) {
+                if (advertisement.getHits() == 0) {
+                    videosToDeletion.add(advertisement);
+                }
+            }
+            videos.removeAll(videosToDeletion);
+            sortVideosForMaxRevenue(videos);
         }
 
         private void sortVideosForMaxRevenue(List<Advertisement> videos) {
@@ -71,7 +99,9 @@ public class AdvertisementManager {
             for (int i = 0; i < videos.size(); i++) {
                 List<Advertisement> newList = new ArrayList<>(videos);
                 newList.remove(i);
-                sortVideosForMaxRevenue(newList);
+                if (calculateTotalPrice(newList) >= bestTotalPrice) {
+                    sortVideosForMaxRevenue(newList);
+                }
             }
         }
 

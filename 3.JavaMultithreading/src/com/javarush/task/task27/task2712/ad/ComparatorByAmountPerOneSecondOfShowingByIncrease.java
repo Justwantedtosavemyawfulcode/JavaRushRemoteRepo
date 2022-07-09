@@ -6,6 +6,6 @@ public class ComparatorByAmountPerOneSecondOfShowingByIncrease implements Compar
 
     @Override
     public int compare(Advertisement o1, Advertisement o2) {
-        return (int) (o2.getAmountPerOneDisplaying() * 1000 / o2.getDuration() - o1.getAmountPerOneDisplaying() * 1000 / o1.getDuration());
+        return (int) (o1.getAmountPerOneDisplaying() * 1000 / o1.getDuration() - o2.getAmountPerOneDisplaying() * 1000 / o2.getDuration());
     }
 }
