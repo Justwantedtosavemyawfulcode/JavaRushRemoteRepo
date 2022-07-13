@@ -13,5 +13,10 @@ public class Restaurant {
         tablet.addObserver(amigoCook);
         amigoCook.addObserver(new Waiter());
         tablet.createOrder();
+//        for (Map.Entry<EventType, List<EventDataRow>> entry : StatisticManager.getInstance().statisticStorage.storage.entrySet()) {
+//            for (EventDataRow eventDataRow : entry.getValue()) {
+//                System.out.println(eventDataRow);
+//            }
+//        }
     }
 }

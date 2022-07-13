@@ -1,6 +1,9 @@
 package com.javarush.task.task27.task2712.ad;
 
 import com.javarush.task.task27.task2712.ConsoleHelper;
+import com.javarush.task.task27.task2712.statistic.StatisticManager;
+import com.javarush.task.task27.task2712.statistic.event.NoAvailableVideoEventDataRow;
+import com.javarush.task.task27.task2712.statistic.event.VideoSelectedEventDataRow;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,9 +23,11 @@ public class AdvertisementManager {
         optimalVideoListCreator.removeAllVideosWithoutHitsAndSortForMaxRevenue(videosForShowing);
         videosForShowing = optimalVideoListCreator.getVideosForShowing();
         if (videosForShowing.isEmpty()) {
+            StatisticManager.getInstance().register(new NoAvailableVideoEventDataRow(0));
             throw new NoVideoAvailableException();
         }
         Collections.sort(videosForShowing, new CustomizedComparator(new ComparatorByAmountPerOneDisplaying(), new ComparatorByAmountPerOneSecondOfShowingByIncrease()));
+        StatisticManager.getInstance().register(new VideoSelectedEventDataRow(videosForShowing, optimalVideoListCreator.bestTotalPrice, (int) optimalVideoListCreator.maxSumTime));
         for (Advertisement advertisement : videosForShowing) {
             advertisement.revalidate();
             ConsoleHelper.writeMessage(String.format("%s is displaying... %d, %d", advertisement.getName(), advertisement.getAmountPerOneDisplaying(), advertisement.getAmountPerOneDisplaying() * 1000 / advertisement.getDuration()));

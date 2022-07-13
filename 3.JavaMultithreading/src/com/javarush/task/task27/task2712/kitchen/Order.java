@@ -28,6 +28,10 @@ public class Order {
         return dishes.isEmpty();
     }
 
+    public List<Dish> getDishes() {
+        return dishes;
+    }
+
     @Override
     public String toString() {
         if (dishes == null || dishes.size() == 0) {
