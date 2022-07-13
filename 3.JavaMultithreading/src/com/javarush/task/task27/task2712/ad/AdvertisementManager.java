@@ -23,7 +23,7 @@ public class AdvertisementManager {
         optimalVideoListCreator.removeAllVideosWithoutHitsAndSortForMaxRevenue(videosForShowing);
         videosForShowing = optimalVideoListCreator.getVideosForShowing();
         if (videosForShowing.isEmpty()) {
-            StatisticManager.getInstance().register(new NoAvailableVideoEventDataRow(0));
+            StatisticManager.getInstance().register(new NoAvailableVideoEventDataRow(timeSeconds));
             throw new NoVideoAvailableException();
         }
         Collections.sort(videosForShowing, new CustomizedComparator(new ComparatorByAmountPerOneDisplaying(), new ComparatorByAmountPerOneSecondOfShowingByIncrease()));

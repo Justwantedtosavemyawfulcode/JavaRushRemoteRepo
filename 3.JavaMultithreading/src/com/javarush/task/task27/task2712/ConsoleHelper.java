@@ -23,8 +23,8 @@ public class ConsoleHelper {
         List<Dish> listOfDishes = new ArrayList<>();
 
         while (true) {
-            System.out.println(Dish.allDishesToString());
-            System.out.println("Введите название блюда в формате представленном выше, либо \"exit\" для выхода:"); // Возможно надо вынести из лупы
+            ConsoleHelper.writeMessage(Dish.allDishesToString());
+            ConsoleHelper.writeMessage("Введите блюдо или \"exit\":"); // Возможно надо вынести из лупы
             String enteredMessage = readString();
             if (enteredMessage.equals("exit")) break;
 
