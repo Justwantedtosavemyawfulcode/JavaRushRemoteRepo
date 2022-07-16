@@ -7,7 +7,7 @@ import java.util.List;
 
 public class VideoSelectedEventDataRow implements EventDataRow {
     private List<Advertisement> optimalVideoSet;
-    private long amount;
+    private long amount; // In cents.
     private int totalDuration;
     private Date currentDate;
 
@@ -20,5 +20,23 @@ public class VideoSelectedEventDataRow implements EventDataRow {
 
     public EventType getType() {
         return EventType.SELECTED_VIDEOS;
+    }
+
+    @Override
+    public Date getDate() {
+        return currentDate;
+    }
+
+    @Override
+    public int getTime() {
+        return totalDuration;
+    }
+
+    public long getAmount() {
+        return amount;
+    }
+
+    public void setCurrentDate(Date date) { // DELETE LATER
+        currentDate = date;
     }
 }
