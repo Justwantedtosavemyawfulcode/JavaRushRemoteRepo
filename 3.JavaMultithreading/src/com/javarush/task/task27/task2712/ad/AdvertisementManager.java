@@ -19,6 +19,7 @@ public class AdvertisementManager {
 
     public void processVideos() {
         List<Advertisement> videosForShowing = new ArrayList<>(storage.list());
+        Collections.reverse(videosForShowing);
         OptimalVideoListCreator optimalVideoListCreator = new OptimalVideoListCreator();
         optimalVideoListCreator.removeAllVideosWithoutHitsAndSortForMaxRevenue(videosForShowing);
         videosForShowing = optimalVideoListCreator.getVideosForShowing();

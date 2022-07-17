@@ -35,6 +35,10 @@ public class Advertisement {
         return hits;
     }
 
+    public boolean isActive() {
+        return hits > 0;
+    }
+
     public void setHits(int hits) {
         this.hits = hits;
     }
