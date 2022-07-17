@@ -14,13 +14,11 @@ public class Restaurant {
         amigoCook.addObserver(new Waiter());
         tablet.createOrder();
 
-//        DirectorTablet directorTablet = new DirectorTablet();
+        DirectorTablet directorTablet = new DirectorTablet();
 //        directorTablet.printAdvertisementProfit();
 //        directorTablet.printCookWorkloading();
-//        directorTablet.printActiveVideoSet();
+        directorTablet.printActiveVideoSet();
 //        directorTablet.printArchivedVideoSet();
-        DirectorTabletTest directorTabletTest = new DirectorTabletTest();
-        directorTabletTest.setUp();
-        directorTabletTest.printAdvertisementProfit();
+
     }
 }

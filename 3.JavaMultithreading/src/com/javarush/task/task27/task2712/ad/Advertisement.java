@@ -4,7 +4,7 @@ public class Advertisement {
     private Object content;
     private String name;
     private long initialAmount; // In cents.
-    private int hits; // Quantity of how many times ad was played.
+    private int hits; // Quantity of how many times ad will gonna played.
     private int duration; // In seconds.
     private long amountPerOneDisplaying; // Initial Amount / hits.
     private long amountPerSecondOfShowing; // Initial amount / duration.
