@@ -4,6 +4,7 @@ import com.javarush.task.task27.task2712.ConsoleHelper;
 import com.javarush.task.task27.task2712.Tablet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -48,5 +49,13 @@ public class Order {
                     .append(tablet.toString())
                     .append(", cooking time " + getTotalCookingTime() + "min").toString();
         }
+    }
+
+    protected void initDishes() throws IOException {
+        dishes = ConsoleHelper.getAllDishesForOrder();
+    }
+
+    public Tablet getTablet() {
+        return tablet;
     }
 }
