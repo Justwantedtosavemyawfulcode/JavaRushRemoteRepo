@@ -10,7 +10,7 @@ public enum Dish {
     private int duration;
 
     public int getDuration() {
-        return duration;
+        return duration; // Minutes
     }
 
     Dish(int duration) {

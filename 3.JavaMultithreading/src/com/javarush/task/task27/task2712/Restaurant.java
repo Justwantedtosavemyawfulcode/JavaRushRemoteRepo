@@ -32,16 +32,17 @@ public class Restaurant {
         randomOrderGeneratorTask.start();
         try {
             Thread.sleep(1000);
-        } catch (InterruptedException e) {
-
+            randomOrderGeneratorTask.interrupt();
+            randomOrderGeneratorTask.join();
+            Thread.sleep(1000);
+        } catch (InterruptedException ignore) {
         }
-        randomOrderGeneratorTask.interrupt();
 
-//        DirectorTablet directorTablet = new DirectorTablet();
-//        directorTablet.printAdvertisementProfit();
-//        directorTablet.printCookWorkloading();
-//        directorTablet.printActiveVideoSet();
-//        directorTablet.printArchivedVideoSet();
+        DirectorTablet directorTablet = new DirectorTablet();
+        directorTablet.printAdvertisementProfit();
+        directorTablet.printCookWorkloading();
+        directorTablet.printActiveVideoSet();
+        directorTablet.printArchivedVideoSet();
 
     }
 }

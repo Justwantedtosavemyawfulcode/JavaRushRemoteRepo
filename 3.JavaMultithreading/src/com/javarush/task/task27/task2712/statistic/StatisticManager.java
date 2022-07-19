@@ -31,6 +31,10 @@ public class StatisticManager {
         cooks.add(cook);
     }
 
+    public Set<Cook> getCooks() {
+        return cooks;
+    }
+
     public TreeMap<String, Long> getRevenuePerDay() {
         TreeMap<String, Long> revenueMap = new TreeMap<>(new Comparator<String>() {
             DateFormat f = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);

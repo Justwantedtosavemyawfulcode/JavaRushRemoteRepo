@@ -18,7 +18,7 @@ public class TestOrder extends Order {
         dishes = new ArrayList<>();
         for (int i = 0; i < Math.random() * 10; i++) {
             Dish[] dishValuesArray = Dish.values();
-            dishes.add(dishValuesArray[(int) (Math.random() * dishValuesArray.length)]);
+            dishes.add(dishValuesArray[(int) (Math.random() * dishValuesArray.length - 1)]);
         }
     }
 }

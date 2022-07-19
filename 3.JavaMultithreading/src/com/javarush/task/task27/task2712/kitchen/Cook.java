@@ -9,7 +9,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class Cook extends Observable {
-    private String name;
+    private final String name;
+    private boolean busy;
 
     public Cook(String name) {
         this.name = name;
@@ -21,10 +22,22 @@ public class Cook extends Observable {
     }
 
     public void startCookingOrder(Order order) {
+        busy = true;
+        try {
+            Thread.sleep(order.getTotalCookingTime() * 10);
+        }
+        catch (InterruptedException e) {
+
+        }
         ConsoleHelper.writeMessage("Start cooking - " + order);
         Tablet tablet = order.getTablet();
         StatisticManager.getInstance().register(new CookedOrderEventDataRow(tablet.toString(), name, order.getTotalCookingTime() * 60, order.getDishes()));
         setChanged();
         notifyObservers(order);
+        busy = false;
+    }
+
+    public boolean isBusy() {
+        return busy;
     }
 }
