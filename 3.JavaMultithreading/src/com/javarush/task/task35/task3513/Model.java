@@ -1,8 +1,6 @@
 package com.javarush.task.task35.task3513;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Model {
     private static final int FIELD_WIDTH = 4;
@@ -168,10 +166,35 @@ public class Model {
         return gameTiles;
     }
 
+    public boolean hasBoardChanged() {
+        Tile[][] previousState = previousStates.peek();
+        for (int i = 0; i < gameTiles.length; i++) {
+            for (int j = 0; j < gameTiles.length; j++) {
+                if (gameTiles[i][j].value != previousState[i][j].value) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public MoveEfficiency getMoveEfficiency(Move move) {
+        move.move();
+        MoveEfficiency returningMoveEfficiency = new MoveEfficiency(getEmptyTiles().size(), score, move);
+        if (!hasBoardChanged()) {
+            return new MoveEfficiency(-1, 0, move);
+        }
+        rollback();
+        return returningMoveEfficiency;
+    }
+
     public boolean canMove() {
-        for (int i = 0; i < gameTiles.length - 1; i++) {
-            for (int j = 0; j < gameTiles.length - 1; j++) {
-                if (gameTiles[i][j].value == 0 || gameTiles[i][j + 1].value == 0 || gameTiles[i][j].value == gameTiles[i][j + 1].value || gameTiles[i][j].value == gameTiles[i + 1][j].value) {
+        if (getEmptyTiles().size() > 0) {
+            return true;
+        }
+        for (int i = 0; i < gameTiles.length; i++) {
+            for (int j = 0; j < gameTiles.length; j++) {
+                if ((j < gameTiles.length - 1 && gameTiles[i][j].value == gameTiles[i][j + 1].value) || (i < gameTiles.length - 1 && gameTiles[i][j].value == gameTiles[i + 1][j].value)) {
                     return true;
                 }
             }
@@ -210,5 +233,14 @@ public class Model {
             case 3: down();
             break;
         }
+    }
+
+    public void autoMove() {
+        PriorityQueue<MoveEfficiency> priorityQueue = new PriorityQueue<>(4, Collections.reverseOrder());
+        priorityQueue.add(getMoveEfficiency(this::left));
+        priorityQueue.add(getMoveEfficiency(this::right));
+        priorityQueue.add(getMoveEfficiency(this::up));
+        priorityQueue.add(getMoveEfficiency(this::down));
+        priorityQueue.peek().getMove().move();
     }
 }
