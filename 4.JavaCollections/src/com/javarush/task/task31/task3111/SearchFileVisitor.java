@@ -13,7 +13,9 @@ public class SearchFileVisitor extends SimpleFileVisitor<Path> {
     private String partOfName;
     private String partOfContent;
     private int minSize;
+    private boolean minSizeIsSet = false;
     private int maxSize;
+    private boolean maxSizeIsSet = false;
     private List<Path> foundFiles = new ArrayList<>();
 
     public List<Path> getFoundFiles() {
@@ -41,6 +43,7 @@ public class SearchFileVisitor extends SimpleFileVisitor<Path> {
     }
 
     public void setMinSize(int minSize) {
+        this.minSizeIsSet = true;
         this.minSize = minSize;
     }
 
@@ -49,13 +52,35 @@ public class SearchFileVisitor extends SimpleFileVisitor<Path> {
     }
 
     public void setMaxSize(int maxSize) {
+        this.maxSizeIsSet = true;
         this.maxSize = maxSize;
     }
 
     @Override
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
         byte[] content = Files.readAllBytes(file); // размер файла: content.length
+        boolean sizeCheck = false;
+        boolean nameCheck = false;
+        boolean contentCheck = false;
 
-        return super.visitFile(file, attrs);
+        if (minSizeIsSet && content.length >= minSize && maxSizeIsSet && content.length <= maxSize) {
+            sizeCheck = true;
+        }
+        if (!minSizeIsSet && maxSizeIsSet && content.length <= maxSize) sizeCheck = true;
+        if (!maxSizeIsSet && minSizeIsSet && content.length >= minSize) sizeCheck = true;
+        if (!minSizeIsSet && !maxSizeIsSet) sizeCheck = true;
+
+        if (partOfName != null && file.getFileName().toString().contains(partOfName)) nameCheck = true;
+        if (partOfName == null) nameCheck = true;
+
+        String text = new String(Files.readAllBytes(file));
+        if (partOfContent != null && text.contains(partOfContent)) contentCheck = true;
+        if (partOfContent == null) contentCheck = true;
+
+        if (sizeCheck && nameCheck && contentCheck) {
+            foundFiles.add(file);
+        }
+
+        return FileVisitResult.CONTINUE;
     }
 }
