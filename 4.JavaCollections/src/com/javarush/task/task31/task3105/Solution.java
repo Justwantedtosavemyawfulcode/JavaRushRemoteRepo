@@ -36,25 +36,15 @@ public class Solution {
         }
 
         try (ZipOutputStream zipOutputStream = new ZipOutputStream(Files.newOutputStream(zip.toPath()))) {
-            boolean fileWithTheSameNameWasWritten = false;
             for (Content content : contentList) {
-                if (content.name.equals(file.getName())) {
-                    zipOutputStream.putNextEntry(new ZipEntry(file.getName()));
-                    Files.copy(file.toPath(), zipOutputStream);
-                    zipOutputStream.closeEntry();
-                    fileWithTheSameNameWasWritten = true;
-                }
-                else {
+                if (!content.name.equals("new/" + file.getName())) {
                     zipOutputStream.putNextEntry(new ZipEntry(content.name));
                     zipOutputStream.write(content.data);
                     zipOutputStream.closeEntry();
                 }
             }
-            if (!fileWithTheSameNameWasWritten) {
-                zipOutputStream.putNextEntry(new ZipEntry("new/" + file.getName()));
-                Files.copy(file.toPath(), zipOutputStream);
-                zipOutputStream.closeEntry();
-            }
+            zipOutputStream.putNextEntry(new ZipEntry("new/" + file.getName()));
+            Files.copy(file.toPath(), zipOutputStream);
         }
     }
 
