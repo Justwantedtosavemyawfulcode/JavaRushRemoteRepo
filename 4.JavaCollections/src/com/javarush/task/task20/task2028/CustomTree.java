@@ -5,14 +5,11 @@ package com.javarush.task.task20.task2028;
 */
 
 import java.io.Serializable;
-import java.util.AbstractList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class CustomTree extends AbstractList<String> implements Cloneable, Serializable {
     Entry<String> root;
-    LinkedList<Entry<String>> tree = new LinkedList<>();
+    ArrayList<Entry<String>> tree = new ArrayList<>();
 
     public CustomTree() {
         root = new Entry<>("root");
@@ -42,6 +39,14 @@ public class CustomTree extends AbstractList<String> implements Cloneable, Seria
             }
         }
         return false;
+//        String parent = tree.get(tree.size() - 1).parent.elementName;
+//        for (int i = tree.size() - 1; i > 0; i--) {
+//            if (tree.get(i).parent.elementName.equals(parent)) {
+//                tree.get(i).availableToAddLeftChildren = true;
+//                tree.get(i).availableToAddRightChildren = true;
+//            }
+//        }
+//        return add(s);
     }
 
     public String getParent(String s) {
@@ -51,6 +56,36 @@ public class CustomTree extends AbstractList<String> implements Cloneable, Seria
             }
         }
         return null;
+    }
+
+    public boolean remove(Object o) {
+        if (!(o instanceof String)) throw new UnsupportedOperationException();
+        String stringName = (String) o;
+        Entry<String> entry = null;
+        for (Entry<String> e : tree) {
+            if (e.elementName.equals(stringName)) {
+                entry = e;
+                break;
+            }
+        }
+        if (entry == null) throw new UnsupportedOperationException();
+
+        if (entry.rightChild != null) {
+            remove(entry.rightChild.elementName);
+        }
+        if (entry.leftChild != null) {
+            remove(entry.leftChild.elementName);
+        }
+        if (!entry.parent.isAvailableToAddChildren()) {
+            if (entry.parent.rightChild.equals(entry)) {
+                entry.parent.availableToAddRightChildren = true;
+            }
+            if (entry.parent.leftChild.equals(entry)) {
+                entry.parent.availableToAddLeftChildren = true;
+            }
+        }
+        tree.remove(entry);
+        return true;
     }
 
     @Override
