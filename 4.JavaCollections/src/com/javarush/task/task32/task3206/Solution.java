@@ -4,6 +4,8 @@ package com.javarush.task.task32.task3206;
 Дженерики для создания прокси-объекта
 */
 
+import java.lang.reflect.Proxy;
+
 public class Solution {
 
     public static void main(String[] args) {
@@ -15,8 +17,11 @@ public class Solution {
         test(solution.getProxy(Big.class));                         //true true false т.к. Big наследуется от Item
     }
 
-    public Item getProxy(Class<?> c, Class... classes ) {
-        return null;
+    public <T extends Item> T getProxy(Class<T> cl, Class... interfacez ) {
+        Class[] interfaces = new Class[interfacez.length + 1];
+        interfaces[0] = cl;
+        System.arraycopy(interfacez, 0, interfaces, 1, interfacez.length);
+        return (T) Proxy.newProxyInstance(cl.getClassLoader(), interfaces, new ItemInvocationHandler());
     }
 
 
