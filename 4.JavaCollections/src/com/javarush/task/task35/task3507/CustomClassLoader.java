@@ -15,7 +15,6 @@ public class CustomClassLoader extends ClassLoader {
         catch (IOException e) {
             e.printStackTrace();
         }
-        String className = name.substring(name.lastIndexOf("\\") + 1, name.lastIndexOf(".")).trim();
         return defineClass(null, bytes, 0, bytes.length);
     }
 }

@@ -1,10 +1,10 @@
 package com.javarush.task.task35.task3507;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,8 +20,9 @@ public class Solution {
 
     public static Set<? extends Animal> getAllAnimals(String pathToAnimals) throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         Set<Animal> resultSet = new HashSet<>();
-        pathToAnimals = pathToAnimals.substring(1);
-        Path pathToDirectory = Paths.get(pathToAnimals);
+//        pathToAnimals = pathToAnimals.substring(1);
+        File file = new File(pathToAnimals);
+        Path pathToDirectory = file.toPath();
         DirectoryStream<Path> directoryStream = Files.newDirectoryStream(pathToDirectory);
         for (Path path : directoryStream) {
             ClassLoader customClassLoader = new CustomClassLoader();
@@ -29,7 +30,6 @@ public class Solution {
             try {
                 Animal animal = (Animal) clazz.newInstance();
                 resultSet.add(animal);
-                System.out.println();
             }
             catch (ClassCastException | IllegalAccessException e) {
 
