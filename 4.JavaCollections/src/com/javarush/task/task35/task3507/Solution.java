@@ -2,6 +2,7 @@ package com.javarush.task.task35.task3507;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,13 +27,12 @@ public class Solution {
         DirectoryStream<Path> directoryStream = Files.newDirectoryStream(pathToDirectory);
         for (Path path : directoryStream) {
             ClassLoader customClassLoader = new CustomClassLoader();
-            Class<?> clazz = customClassLoader.loadClass(path.toString());
-            try {
-                Animal animal = (Animal) clazz.newInstance();
-                resultSet.add(animal);
-            }
-            catch (ClassCastException | IllegalAccessException e) {
-
+            Class<?> clazz = customClassLoader.loadClass(path.toAbsolutePath().toString());
+            Constructor[] constructors = clazz.getConstructors();
+            for (Constructor constructor : constructors) {
+                if (constructor.getParameterCount() == 0) {
+                    resultSet.add((Animal) clazz.newInstance());
+                }
             }
         }
         return resultSet;

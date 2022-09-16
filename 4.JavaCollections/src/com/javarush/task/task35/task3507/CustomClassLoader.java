@@ -11,10 +11,11 @@ public class CustomClassLoader extends ClassLoader {
         byte[] bytes = new byte[0];
         try {
             bytes = Files.readAllBytes(Paths.get(name));
+            return defineClass(null, bytes, 0, bytes.length);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
-        return defineClass(null, bytes, 0, bytes.length);
+        return super.findClass(name);
     }
 }
