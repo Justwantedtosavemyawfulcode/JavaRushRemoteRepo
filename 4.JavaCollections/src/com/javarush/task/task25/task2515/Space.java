@@ -108,6 +108,9 @@ public class Space {
      * Создаем новый НЛО. 1 раз на 10 вызовов.
      */
     public void createUfo() {
+        if (ufos.isEmpty()) {
+            ufos.add(new Ufo(2, 0));
+        }
         //тут нужно создать новый НЛО.
     }
 
@@ -117,7 +120,16 @@ public class Space {
      * б) падение ниже края игрового поля (бомба умирает)
      */
     public void checkBombs() {
-        //тут нужно проверить все возможные столкновения для каждой бомбы.
+        for (Bomb bomb : bombs) {
+            if (bomb.getY() > height) {
+                bomb.die();
+            }
+            if (ship.isIntersect(bomb)) {
+                ship.die();
+                bomb.die();
+            }
+            //тут нужно проверить все возможные столкновения для каждой бомбы.
+        }
     }
 
     /**
@@ -126,6 +138,17 @@ public class Space {
      * б) вылет выше края игрового поля (ракета умирает)
      */
     public void checkRockets() {
+        for (Ufo ufo : ufos) {
+            for (Rocket rocket : rockets) {
+                if (rocket.getY() < 0) {
+                    rocket.die();
+                }
+                if (rocket.isIntersect(ufo)) {
+                    ufo.die();
+                    rocket.die();
+                }
+            }
+        }
         //тут нужно проверить все возможные столкновения для каждой ракеты.
     }
 
@@ -133,6 +156,29 @@ public class Space {
      * Удаляем умершие объекты (бомбы, ракеты, НЛО) из списков
      */
     public void removeDead() {
+        List<Ufo> newUfos = new ArrayList<>(ufos);
+        for (Ufo ufo : ufos) {
+            if (!ufo.isAlive()) {
+                newUfos.remove(ufo);
+            }
+        }
+        ufos = newUfos;
+
+        List<Rocket> newRockets = new ArrayList<>(rockets);
+        for (Rocket rocket : rockets) {
+            if (!rocket.isAlive()) {
+                newRockets.remove(rocket);
+            }
+        }
+        rockets = newRockets;
+
+        List<Bomb> newBombs = new ArrayList<>(bombs);
+        for (Bomb bomb : bombs) {
+            if (!bomb.isAlive()) {
+                newBombs.remove(bomb);
+            }
+        }
+        bombs = newBombs;
         //тут нужно удалить все умершие объекты из списков (кроме космического корабля)
     }
 
